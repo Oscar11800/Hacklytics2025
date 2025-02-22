@@ -1,60 +1,46 @@
 {% extends 'base.html' %}
-
 {% block content %}
-<html>
-<head>
-    <script src="https://cdn.jsdelivr.net/gh/arose/ngl@latest/dist/ngl.js"></script>
-</head>
-<body>
-    <h1>Protein Viewer</h1>
-    <div id="viewport" style="width: 600px; height: 400px;"></div>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            if (typeof NGL === "undefined") {
-                console.error("NGL failed to load. Check the script URL.");
-                return;
-            }
-
-            var stage = new NGL.Stage("viewport");  // Ensure 'NGL.Stage' is defined
-            stage.loadFile("https://files.rcsb.org/download/8KEW.pdb", { ext: "pdb" }).then(function (o) {
-                o.addRepresentation("cartoon");
-                o.autoView();
-            }).catch(err => console.error("NGL Load Error:", err));
-        });
-    </script>
-</body>
-</html>
-<!--<html>-->
-<!--<head>-->
-<!--    <script src="https://unpkg.com/ngl"></script>-->
-<!--</head>-->
-<!--<body>-->
-<!--    <div id="viewport" style="width: 600px; height: 400px;"></div>-->
-<!--    <script>-->
-<!--        var stage = new NGL.Stage("viewport");-->
-<!--        stage.loadFile("/fetch_pdb/1HHO/", { ext: "pdb" }).then(function(o) {-->
-<!--            o.addRepresentation("cartoon");-->
-<!--            o.autoView();-->
-<!--        });-->
-<!--    </script>-->
-<!--</body>-->
-<!--</html>-->
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Protein Visualizer</title>
+    <title>PDB Viewer</title>
+    <script src="https://unpkg.com/ngl@2.1.0/dist/ngl.js"></script>
 </head>
 <body>
-    <h1>Protein Visualization</h1>
-    <p>If you see this, your template is loading correctly!</p>
+    <h1>PDB Viewer</h1>
+
+    <!-- Form for user input -->
+    <form method="get" action="{% url 'view_pdb' %}">
+        <label for="identifier">Enter UniProt or PDB ID:</label>
+        <input type="text" id="identifier" name="identifier" required>
+        <button type="submit">View</button>
+    </form>
+
+    <!-- NGL Viewer container -->
+    <div id="viewport" style="width: 600px; height: 400px;"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const pdbId = "{{ pdb_id }}";  // Pass the PDB ID from your view
+            if (pdbId) {
+                const pdbUrl = `/protein/pdb/${pdbId}.pdb`;  // Fetch the PDB file from the serve_pdb_file view
+
+                // Initialize NGL Viewer
+                const stage = new NGL.Stage("viewport", { backgroundColor: "white" });
+
+                // Load the PDB file
+                stage.loadFile(pdbUrl).then(function(component) {
+                    component.addRepresentation("ball+stick");
+                    component.autoView();
+                }).catch(function(error) {
+                    console.error("Error loading PDB file:", error);
+                });
+            } else {
+                console.log("No PDB ID provided. Please enter a UniProt or PDB ID.");
+            }
+        });
+    </script>
 </body>
 </html>
-
-<body>
-    <h1>Protein Viewer</h1>
-    <p>Viewing PDB: {{ pdb_id }}</p>
-</body>
 {% endblock content %}
