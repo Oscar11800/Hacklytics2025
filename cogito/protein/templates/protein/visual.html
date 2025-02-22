@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<html>
+<head>
+    <script src="https://cdn.jsdelivr.net/gh/arose/ngl@latest/dist/ngl.js"></script>
+</head>
+<body>
+    <h1>Protein Viewer</h1>
+    <div id="viewport" style="width: 600px; height: 400px;"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            if (typeof NGL === "undefined") {
+                console.error("NGL failed to load. Check the script URL.");
+                return;
+            }
+
+            var stage = new NGL.Stage("viewport");  // Ensure 'NGL.Stage' is defined
+            stage.loadFile("https://files.rcsb.org/download/8KEW.pdb", { ext: "pdb" }).then(function (o) {
+                o.addRepresentation("cartoon");
+                o.autoView();
+            }).catch(err => console.error("NGL Load Error:", err));
+        });
+    </script>
+</body>
+</html>
+<!--<html>-->
+<!--<head>-->
+<!--    <script src="https://unpkg.com/ngl"></script>-->
+<!--</head>-->
+<!--<body>-->
+<!--    <div id="viewport" style="width: 600px; height: 400px;"></div>-->
+<!--    <script>-->
+<!--        var stage = new NGL.Stage("viewport");-->
+<!--        stage.loadFile("/fetch_pdb/1HHO/", { ext: "pdb" }).then(function(o) {-->
+<!--            o.addRepresentation("cartoon");-->
+<!--            o.autoView();-->
+<!--        });-->
+<!--    </script>-->
+<!--</body>-->
+<!--</html>-->
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protein Visualizer</title>
+</head>
+<body>
+    <h1>Protein Visualization</h1>
+    <p>If you see this, your template is loading correctly!</p>
+</body>
+</html>
+
+<body>
+    <h1>Protein Viewer</h1>
+    <p>Viewing PDB: {{ pdb_id }}</p>
+</body>
+{% endblock content %}
