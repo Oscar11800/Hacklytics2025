@@ -1,4 +1,252 @@
-<div>
-    {% block content %}
-    {% endblock content %}
-</div>
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProteinAI</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Custom styles */
+        body {
+            background-color: #DEDEDE;
+            margin: 0;
+            padding: 0;
+        }
+        .vertical-bar {
+            width: 17%;
+            height: calc(100vh - 30px); /* Full height minus top and bottom margins */
+            background-color: #ffffff; /* White background */
+            position: fixed;
+            top: 15px; /* Margin from the top */
+            left: 20px; /* Margin from the left */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center; /* Center vertically */
+            padding-top: 20px; /* Space for the logo */
+            border-radius: 15px; /* Rounded corners */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+        }
+        .vertical-bar .logo {
+            width: 80%; /* Logo width */
+            margin-bottom: 20px; /* Spacing below the logo */
+            position: absolute; /* Position the logo at the top */
+            top: 20px; /* Distance from the top */
+        }
+        .vertical-bar .btn {
+            font-size: x-large;
+            font-weight: bold;
+            width: 45%; /* Button width */
+            margin: 10px 0; /* Spacing between buttons */
+            background-color: #ffffff; /* White background */
+            color: #212529; /* Dark text */
+            border: none; /* Remove default border */
+            transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
+            border-radius: 8px; /* Rounded corners for buttons */
+        }
+        .vertical-bar .btn:hover {
+            background-color: #b42cf8; /* Light purple background on hover */
+            color: #ffffff; /* White text on hover */
+        }
+
+        /* Main content styling */
+        .main-content {
+            margin-left: 18%; /* Offset for vertical bar */
+            padding-right: 40px;
+            padding-left: 40px;
+        }
+
+        .dashboard-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-box {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-placeholder {
+            /*background: #f0f0f0;*/
+            height: 200px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        .navbar-custom .nav-link {
+            font-weight: 600;
+            margin-left: 25px;
+        }
+        .content-page {
+            display: none;
+        }
+        .content-page.active {
+            display: block;
+        }
+        .btn.active {
+            background-color: #b42cf8 !important;
+            color: white !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Vertical Bar (keep your existing version) -->
+   <div class="vertical-bar">
+        <img src="{% static 'img/proteinAI_logo.png' %}" alt="logo" class="logo" />
+        <button class="btn btn-light active" onclick="showContent('home')">Home</button>
+        <button class="btn btn-light" onclick="showContent('results')">Results</button>
+        <button class="btn btn-light" onclick="showContent('saved')">Saved</button>
+        <button class="btn btn-light" onclick="showContent('settings')">Settings</button>
+    </div>
+
+    <!-- Navbar -->
+    <div class="navbar-custom">
+        <nav class="p-3 navbar navbar-expand-lg">
+            <div class="container">
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                    <div class="navbar-nav ms-auto">
+                        <a class="nav-link" href=""></a>
+                        <a class="nav-link" href=""></a>
+`                        <a class="nav-link" href=""></a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Main Content --><!-- Main Content -->
+    <div class="main-content">
+        <!-- Home Content -->
+        <div id="home-content" class="content-page">
+            <h1 class="fw-bold text-xl text-center">Welcome to ProteinAI Dashboard</h1>
+                <p class="text-large text-center">Search Proteins to get started!</p>
+            <div class="d-flex flex-column align-items-center justify-content-center" style="height: 80vh;">
+                <!-- Search Bar -->
+                <div class="input-group mb-3" style="width: 60%; max-width: 600px;">
+                    <input type="text" class="form-control form-control-lg" placeholder="Enter protein sequence or ID..." aria-label="Search">
+                </div>
+
+                <!-- Submit Button -->
+                <button class="btn btn-lg mb-3" style="background-color: #b42cf8; color: white;">
+                    Analyze Protein Interactions
+                </button>
+
+                <!-- Instructional Text -->
+                <p class="text-muted text-center" style="max-width: 800px; font-style: italic;">
+                    Enter a valid ID (UniProt RCSB Format).
+                    Example ID: <code>P12345</code>
+                </p>
+            </div>
+        </div>
+
+        <!-- Results Content (default visible) -->
+        <div id="results-content" class="content-page active">
+            <div class="mb-4">
+            <h1 class="fw-bold">Results</h1>
+        </div>
+
+        <!-- First Row -->
+        <div class="row">
+            <div class="col-md-8">
+                <div class="dashboard-card">
+                    <h4>Website Views</h4>
+                    <p class="text-muted">Last Campaign Performance</p>
+                    <div class="chart-placeholder"></div>
+                    <div class="text-muted small">© campaign sent 2 days ago</div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="dashboard-card">
+                    <h4>Daily Sales</h4>
+                    <p class="text-success">(+15%) increase in today sales.</p>
+                    <div class="chart-placeholder"></div>
+                    <div class="text-muted small">© updated 4 min ago</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Second Row -->
+        <div class="row">
+            <div class="col-md-8">
+                <div class="dashboard-card">
+                    <h4>Completed Tasks</h4>
+                    <p class="text-muted">Last Campaign Performance</p>
+                    <div class="chart-placeholder"></div>
+                    <div class="text-muted small">- just updated</div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <div class="stat-box">
+                            <h5>Bookings</h5>
+                            <h2 class="fw-bold">281</h2>
+                            <span class="text-success">+95% than last week</span>
+                        </div>
+                    </div>
+                    <div class="col-12 mb-3">
+                        <div class="stat-box">
+                            <h5>Today's Users</h5>
+                            <h2 class="fw-bold">2,300</h2>
+                            <span class="text-success">+3% than last month</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+
+        <div id="saved-content" class="content-page">
+            <div class="mb-4">
+                <h1 class="fw-bold">Saved</h1>
+                <div class="dashboard-card">
+                    <h4>Saved proteins</h4>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Content -->
+        <div id="settings-content" class="content-page">
+            <div class="mb-4">
+                <h1 class="fw-bold">Settings</h1>
+                <div class="dashboard-card">
+                    <h4>Account Settings</h4>
+                    <!-- Add settings form/content here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showContent(pageId) {
+            // Hide all content pages
+            document.querySelectorAll('.content-page').forEach(page => {
+                page.classList.remove('active');
+            });
+
+            // Remove active class from all buttons
+            document.querySelectorAll('.vertical-bar .btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show selected content
+            document.getElementById(`${pageId}-content`).classList.add('active');
+
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+    </script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
