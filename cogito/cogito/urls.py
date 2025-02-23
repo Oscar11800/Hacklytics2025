@@ -16,8 +16,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from . import views
 
 urlpatterns = [
+    path('', views.view_pdb, name='view_pdb'),  # Ensure this name matches your template
+    path("protein/pdb/<str:pdb_id>.pdb", views.serve_pdb_file, name="serve_pdb_file"),
+    path('', include("home.urls")),
     path("protein/", include("protein.urls")),  # Include your app's URLs
     path('admin/', admin.site.urls),
 ]

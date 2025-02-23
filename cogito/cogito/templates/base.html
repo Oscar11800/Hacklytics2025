@@ -3,7 +3,8 @@
 {% load static %}
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/ngl@2.1.0/dist/ngl.js"></script>
     <title>ProteinAI</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -124,82 +125,76 @@
     <!-- Main Content --><!-- Main Content -->
     <div class="main-content">
         <!-- Home Content -->
-        <div id="home-content" class="content-page">
+        <div id="home-content" class="content-page active">
             <h1 class="fw-bold text-xl text-center">Welcome to ProteinAI Dashboard</h1>
-                <p class="text-large text-center">Search Proteins to get started!</p>
+            <p class="text-large text-center">Search Proteins to get started!</p>
             <div class="d-flex flex-column align-items-center justify-content-center" style="height: 80vh;">
                 <!-- Search Bar -->
-                <div class="input-group mb-3" style="width: 60%; max-width: 600px;">
-                    <input type="text" class="form-control form-control-lg" placeholder="Enter protein sequence or ID..." aria-label="Search">
-                </div>
-
-                <!-- Submit Button -->
-                <button class="btn btn-lg mb-3" style="background-color: #b42cf8; color: white;">
-                    Analyze Protein Interactions
-                </button>
-
-                <!-- Instructional Text -->
-                <p class="text-muted text-center" style="max-width: 800px; font-style: italic;">
-                    Enter a valid ID (UniProt RCSB Format).
-                    Example ID: <code>P12345</code>
-                </p>
+                <form method="get" action="{% url 'view_pdb' %}" class="w-100 d-flex flex-column align-items-center">
+                    <!-- Input Bar -->
+                    <div class="input-group mb-3" style="width: 750px;">
+                        <input type="text"
+                               class="form-control form-control-lg"
+                               placeholder="Enter protein sequence or ID..."
+                               aria-label="Search"
+                               id="identifier"
+                               name="identifier"
+                               required>
+                    </div>
+                    <!-- Submit Button -->
+                    <button type="submit"
+                            class="btn btn-lg mb-3"
+                            style="background-color: #b42cf8; color: white; width: 300px;">
+                        Analyze Protein Interactions
+                    </button>
+                    <!-- Instructional Text -->
+                    <p class="text-muted text-center" style="max-width: 800px; font-style: italic;">
+                        Enter a valid ID (UniProt or RCSB Format).<br>
+                        Example ID: <code>P12345</code> or <code>1HHO</code>
+                    </p>
+                </form>
             </div>
         </div>
 
         <!-- Results Content (default visible) -->
-        <div id="results-content" class="content-page active">
+        <div id="results-content" class="content-page">
             <div class="mb-4">
-            <h1 class="fw-bold">Results</h1>
-        </div>
-
-        <!-- First Row -->
-        <div class="row">
-            <div class="col-md-8">
-                <div class="dashboard-card">
-                    <h4>Website Views</h4>
-                    <p class="text-muted">Last Campaign Performance</p>
-                    <div class="chart-placeholder"></div>
-                    <div class="text-muted small">© campaign sent 2 days ago</div>
-                </div>
+                <h1 class="fw-bold">Rendering of {{ pdb_id }} Protein</h1>
             </div>
 
-            <div class="col-md-4">
-                <div class="dashboard-card">
-                    <h4>Daily Sales</h4>
-                    <p class="text-success">(+15%) increase in today sales.</p>
-                    <div class="chart-placeholder"></div>
-                    <div class="text-muted small">© updated 4 min ago</div>
+            <!-- First Row -->
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="dashboard-card" style="height: 600px">
+                        <div id="viewport" style="width: 100%; height: 100%; border-radius: 20px"></div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="dashboard-card" style="height: 600px">
+
+                    </div>
                 </div>
             </div>
-        </div>
 
         <!-- Second Row -->
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-6">
                 <div class="dashboard-card">
-                    <h4>Completed Tasks</h4>
-                    <p class="text-muted">Last Campaign Performance</p>
+                    <h4>Information about Protein</h4>
                     <div class="chart-placeholder"></div>
-                    <div class="text-muted small">- just updated</div>
                 </div>
             </div>
-
-            <div class="col-md-4">
-                <div class="row">
-                    <div class="col-12 mb-3">
-                        <div class="stat-box">
-                            <h5>Bookings</h5>
-                            <h2 class="fw-bold">281</h2>
-                            <span class="text-success">+95% than last week</span>
-                        </div>
-                    </div>
-                    <div class="col-12 mb-3">
-                        <div class="stat-box">
-                            <h5>Today's Users</h5>
-                            <h2 class="fw-bold">2,300</h2>
-                            <span class="text-success">+3% than last month</span>
-                        </div>
-                    </div>
+            <div class="col-md-6">
+                <div class="dashboard-card">
+                    <h4>PDB Information</h4>
+                    <p><strong>Title:</strong> {{ pdb_info.Title }}</p>
+                    <p><strong>PDB DOI:</strong> <a href="{{ pdb_info.PDB_DOI }}" target="_blank">{{ pdb_info.PDB_DOI }}</a></p>
+                    <p><strong>Classification:</strong> {{ pdb_info.Classification }}</p>
+                    <p><strong>Organism(s):</strong> {{ pdb_info.Organism }}</p>
+                    <p><strong>Mutation(s):</strong> {{ pdb_info.Mutation }}</p>
+                    <p><strong>Deposited:</strong> {{ pdb_info.Deposited }}</p>
+                    <p><strong>Released:</strong> {{ pdb_info.Released }}</p>
+                    <p><strong>Deposition Author(s):</strong> {{ pdb_info.Deposition_Author }}</p>
                 </div>
             </div>
         </div>
@@ -227,23 +222,61 @@
     </div>
 
     <script>
-        function showContent(pageId) {
-            // Hide all content pages
-            document.querySelectorAll('.content-page').forEach(page => {
-                page.classList.remove('active');
-            });
+       function showContent(pageId) {
+    // Hide all content pages
+    document.querySelectorAll('.content-page').forEach(page => {
+        page.classList.remove('active');
+    });
 
-            // Remove active class from all buttons
-            document.querySelectorAll('.vertical-bar .btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
+    // Remove active class from all buttons
+    document.querySelectorAll('.vertical-bar .btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
 
-            // Show selected content
-            document.getElementById(`${pageId}-content`).classList.add('active');
+    // Show selected content
+    const activePage = document.getElementById(`${pageId}-content`);
+    activePage.classList.add('active');
 
-            // Add active class to clicked button
-            event.target.classList.add('active');
-        }
+    // Add active class to clicked button
+    event.target.classList.add('active');
+
+    // Reinitialize the NGL Viewer if the results page is shown
+    if (pageId === "results" && "{{ pdb_id }}") {
+        const pdbId = "{{ pdb_id }}";
+        const pdbUrl = `/protein/pdb/${pdbId}.pdb`;
+
+        const stage = new NGL.Stage("viewport", { backgroundColor: "white", zIndex: 10 });
+
+        stage.loadFile(pdbUrl).then(function(component) {
+            component.addRepresentation("ball+stick");
+            component.autoView();
+            stage.autoView();
+        }).catch(function(error) {
+            console.error("Error loading PDB file:", error);
+        });
+    }
+}
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const pdbId = "{{ pdb_id }}";  // Pass the PDB ID from your view
+
+            if (pdbId) {
+                const pdbUrl = `/protein/pdb/${pdbId}.pdb`;  // Fetch the PDB file from the serve_pdb_file view
+                // Initialize NGL Viewer
+                const stage = new NGL.Stage("viewport", { backgroundColor: "white", zIndex: 10});
+
+                // Load the PDB file
+                stage.loadFile(pdbUrl).then(function(component) {
+                    component.addRepresentation("ball+stick");
+                    component.autoView();
+                }).catch(function(error) {
+                    console.error("Error loading PDB file:", error);
+                });
+            } else {
+                console.log("No PDB ID provided. Please enter a UniProt or PDB ID.");
+            }
+        });
     </script>
 
     <!-- Bootstrap JS -->

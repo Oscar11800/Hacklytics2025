@@ -26,8 +26,12 @@
             if (pdbId) {
                 const pdbUrl = `/protein/pdb/${pdbId}.pdb`;  // Fetch the PDB file from the serve_pdb_file view
 
-                // Initialize NGL Viewer
-                const stage = new NGL.Stage("viewport", { backgroundColor: "white" });
+                // Initialize NGL Viewer with explicit settings
+                const stage = new NGL.Stage("viewport", {
+                    backgroundColor: "white",
+                    width: "100%",
+                    height: "400px"
+                });
 
                 // Load the PDB file
                 stage.loadFile(pdbUrl).then(function(component) {
