@@ -57,6 +57,32 @@ def serve_pdb_file(request, pdb_id):
 from django.shortcuts import render
 from django.http import HttpResponseBadRequest
 
+def get_pdb_info(pdb_id):
+    if not pdb_id:
+        return {"error": "Missing pdb_id parameter"}
+
+    url = f"https://data.rcsb.org/rest/v1/core/entry/{pdb_id}"
+    response = requests.get(url)
+
+    if response.status_code != 200:
+        return {"error": f"Failed to fetch data for PDB ID {pdb_id}"}
+
+    data = response.json()
+
+    pdb_info = {
+        "title": data.get("struct", {}).get("title", "N/A"),
+        "PDB DOI": data.get("rcsb_entry_container_identifiers", {}).get("doi", "N/A"),
+        "Classification": data.get("struct_keywords", {}).get("pdbx_keywords", "N/A"),
+        "Organism(s)": ", ".join([s.get("scientific_name", "N/A") for s in
+                                  data.get("rcsb_entry_container_identifiers", {}).get("taxonomy", [])]),
+        "Mutation(s)": "Yes" if data.get("pdbx_entry_details", {}).get("nonpolymer_details") else "No",
+        "Deposited": data.get("pdbx_database_status", {}).get("recvd_initial_deposition_date", "N/A"),
+        "Released": data.get("pdbx_database_status", {}).get("pdbx_database_release_date", "N/A"),
+        "Deposition Author(s)": ", ".join(data.get("audit_author", []))
+    }
+
+    return pdb_info
+
 def view_pdb(request):
     if request.method == "GET":
         # Retrieve the 'identifier' from the URL query parameters
@@ -80,33 +106,8 @@ def view_pdb(request):
                 return HttpResponseBadRequest(str(e))
 
         pdb_info = get_pdb_info(pdb_id)
-        print(pdb_info)
         # Render the template with the identifier and pdb_id
         return render(request, "protein/base.html", {"identifier": identifier, "pdb_id": pdb_id, "pdb_info": pdb_info})
 
 
-def get_pdb_info(pdb_id):
-    if not pdb_id:
-        return {"error": "Missing pdb_id parameter"}
 
-    url = f"https://data.rcsb.org/rest/v1/core/entry/{pdb_id}"
-    response = requests.get(url)
-
-    if response.status_code != 200:
-        return {"error": f"Failed to fetch data for PDB ID {pdb_id}"}
-
-    data = response.json()
-
-    pdb_info = {
-        "Title": data.get("struct", {}).get("title", "N/A"),
-        "PDB DOI": data.get("rcsb_entry_container_identifiers", {}).get("doi", "N/A"),
-        "Classification": data.get("struct_keywords", {}).get("pdbx_keywords", "N/A"),
-        "Organism(s)": ", ".join([s.get("scientific_name", "N/A") for s in
-                                  data.get("rcsb_entry_container_identifiers", {}).get("taxonomy", [])]),
-        "Mutation(s)": "Yes" if data.get("pdbx_entry_details", {}).get("nonpolymer_details") else "No",
-        "Deposited": data.get("pdbx_database_status", {}).get("recvd_initial_deposition_date", "N/A"),
-        "Released": data.get("pdbx_database_status", {}).get("pdbx_database_release_date", "N/A"),
-        "Deposition Author(s)": ", ".join(data.get("audit_author", []))
-    }
-
-    return pdb_info
