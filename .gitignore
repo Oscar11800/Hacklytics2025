@@ -1,2 +1,5 @@
 *.txt
 *.csv
+*.pt
+*.npz
+*.json
