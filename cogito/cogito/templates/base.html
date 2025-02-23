@@ -39,7 +39,7 @@
         .vertical-bar .btn {
             font-size: x-large;
             font-weight: bold;
-            width: 45%; /* Button width */
+            width: 55%; /* Button width */
             margin: 10px 0; /* Spacing between buttons */
             background-color: #ffffff; /* White background */
             color: #212529; /* Dark text */
@@ -103,8 +103,6 @@
         <img src="{% static 'img/proteinAI_logo.png' %}" alt="logo" class="logo" />
         <button class="btn btn-light active" onclick="showContent('home')">Home</button>
         <button class="btn btn-light" onclick="showContent('results')">Results</button>
-        <button class="btn btn-light" onclick="showContent('saved')">Saved</button>
-        <button class="btn btn-light" onclick="showContent('settings')">Settings</button>
     </div>
 
     <!-- Navbar -->
@@ -177,34 +175,27 @@
                     </div>
                 </div>
             </div>
-
+<!-- <p><strong>Title:</strong> {{ pdb_info.title }}</p>-->
+<!--                    <p><strong>Classification:</strong> {{ pdb_info.Classification }}</p>-->
         <!-- Second Row -->
         <div class="row">
             <div class="col-md-6">
                 <div class="dashboard-card">
                     <h4>Information about {{ pdb_id }} Protein</h4>
-                    <p><strong>Title:</strong> {{ pdb_info.title }}</p>
-                    <p><strong>PDB DOI:</strong> <a href="{{ pdb_info.PDB_DOI }}" target="_blank">{{ pdb_info.PDB_DOI }}</a></p>
-                    <p><strong>Classification:</strong> {{ pdb_info.Classification }}</p>
-                    <p><strong>Organism(s):</strong> {{ pdb_info.Organism }}</p>
-                    <p><strong>Mutation(s):</strong> {{ pdb_info.Mutation }}</p>
-                    <p><strong>Deposited:</strong> {{ pdb_info.Deposited }}</p>
-                    <p><strong>Released:</strong> {{ pdb_info.Released }}</p>
-                    <p><strong>Deposition Author(s):</strong> {{ pdb_info.Deposition_Author }}</p>
+                    {% for key, value in pdb_info.items %}
+                        <div class="pdb-info-item">
+                            <strong>{{ key }}:</strong> {{ value }}
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="dashboard-card">
                     <h4>Protein-Protein Interaction (PPI)</h4>
-                    <div>
-                        <a href="#" onclick="setSecondRender(this.textContent)">8WL6</a>
-                    </div>
-                    <div>
-                        <a href="#" onclick="setSecondRender(this.textContent)">1HHO</a>
-                    </div>
-                    <div>
-                        <a href="#" onclick="setSecondRender(this.textContent)">5JDO</a>
-                    </div>
+                    {% for pdb_id in all_pdb_ids %}
+                        <a href="javascript:void(0);" onclick="setSecondRender('{{ pdb_id }}')">{{ pdb_id }}</a>
+                        <br>
+                    {% endfor %}
                 </div>
             </div>
 
