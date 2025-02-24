@@ -11,7 +11,7 @@ A huge thank you to **GT and Hacklytics** for providing computing resources!
 ---
 
 ## What It Does  
-Given a protein ID (UniProt or RCSB), ProteinAI runs a feed-forward neural network using embeddings from Meta’s ESM2 protein language model and AlphaFold to predict potential protein-protein interactions (PPIs).  
+- Given a protein ID (UniProt or RCSB), ProteinAI runs a feed-forward neural network using embeddings from Meta’s ESM2 protein language model and AlphaFold to predict potential protein-protein interactions (PPIs).  
 ProteinAI then generates side-by-side 3D visualizations of the target protein and a user-selected interacting protein.  
 ---
 
