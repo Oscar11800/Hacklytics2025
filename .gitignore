@@ -3,3 +3,4 @@
 *.pt
 *.npz
 *.json
+!requirements.txt
