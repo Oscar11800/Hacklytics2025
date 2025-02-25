@@ -52,6 +52,6 @@ ProteinAI then generates side-by-side 3D visualizations of the target protein an
 ---
 
 ## What's Next for ProteinAI  
-- We plan to  store previously searched proteins in SQLite for faster retrieval and better 3D visualization performance.  
+- We plan to store previously searched proteins in SQLite for faster retrieval and better 3D visualization performance.  
   - We would like to add customizable representation modes( e.g., space-filling, ribbon, surface models).  
 - We would like to simulate multiple interacting proteins in the same environment.
