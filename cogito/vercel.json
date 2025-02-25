@@ -3,7 +3,7 @@
     "routes": [
         {
             "src": "/static/(.*)",
-            "dest": "/cogito/staticfiles/$1"
+            "dest": "/staticfiles/$1"
         },
         {
             "src": "/(.*)",
