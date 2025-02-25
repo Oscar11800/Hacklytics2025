@@ -7,7 +7,7 @@
         },
         {
             "src": "/(.*)",
-            "dest": "/"
+            "dest": "cogito/wsgi.py"
         }
     ]
 }
