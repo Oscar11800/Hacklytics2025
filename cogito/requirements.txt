@@ -1,3 +1,4 @@
+--no-warn-script-location
 anyio==4.8.0
 appdirs==1.4.4
 appnope==0.1.4
@@ -39,7 +40,7 @@ fqdn==1.5.1
 fsspec==2025.2.0
 gunicorn==23.0.0
 h11==0.14.0
-hidapi==0.14.0.post3
+hidapi==0.14.0.post4
 httpcore==1.0.7
 httpx==0.28.1
 idna==3.10
