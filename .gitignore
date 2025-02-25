@@ -3,5 +3,6 @@
 *.pt
 *.npz
 *.json
+staticfiles 
 !requirements.txt
 !vercel.json
