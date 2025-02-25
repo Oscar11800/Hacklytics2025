@@ -13,7 +13,7 @@ bcrypt==4.2.1
 beautifulsoup4==4.13.3
 biopython==1.85
 bleach==6.2.0
-capstone
+capstone==4.0.2
 certifi==2024.8.30
 cffi==1.17.1
 charset-normalizer==3.4.1
