@@ -4,3 +4,4 @@
 *.npz
 *.json
 !requirements.txt
+!vercel.json
