@@ -19,13 +19,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-85udxaqj^k341&pkn-vh@ivygy06uxi-ucs5(s1t^32u%8x#w('
 
+SECRET_KEY = os.getenv('SECRET_KEY', 'your-default-key-for-dev')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['protein-ai-iota.vercel-app', '127.0.0.1', 'proteinai.tech', 'www.proteinai.tech']
+ALLOWED_HOSTS = ['protein-ai-iota.vercel.app', '127.0.0.1', 'proteinai.tech', 'www.proteinai.tech']
 
 
 # Application definition
@@ -70,14 +69,25 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'cogito.wsgi.app'
+WSGI_APPLICATION = 'cogito.wsgi.application'
 
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.dummy'
+    }
 }
+
+class DisableMigrations:
+    def __contains__(self, item):
+        return True
+    def __getitem__(self, item):
+        return None
+
+MIGRATION_MODULES = DisableMigrations()
 
 
 # Password validation
@@ -116,16 +126,17 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
 if os.environ.get("VERCEL"):
     STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 STATICFILES_DIRS = [
-      BASE_DIR / 'cogito/static/',
-  ]
+    os.path.join(BASE_DIR, 'cogito/static'),
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
