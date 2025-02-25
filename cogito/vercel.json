@@ -1,19 +1,13 @@
 {
     "version": 2,
-    "builds": [
-        {
-            "src": "cogito/wsgi.py",
-            "use": "@vercel/python"
-        }
-    ],
     "routes": [
         {
             "src": "/static/(.*)",
-            "dest": "staticfiles/$1"
+            "dest": "/cogito/staticfiles/$1"
         },
         {
             "src": "/(.*)",
-            "dest": "cogito/wsgi.py"
+            "dest": "/"
         }
     ]
 }
