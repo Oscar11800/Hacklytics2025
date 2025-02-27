@@ -221,8 +221,7 @@ def inference(uniprot_id):
     model = torch.jit.load(os.path.join(settings.BASE_DIR, "model_traced.pt"), map_location=torch.device('cpu'))
     print(uniprot_id)
     model.eval()
-    input_tensor = torch.load("/Users/tejaakella/Desktop/Hacklytics2025/cogito/protein/smallembed.pt",
-                              map_location=torch.device('cpu'))[uniprot_id]
+    input_tensor = torch.load(os.path.join(settings.BASE_DIR, "protein", "smallembed.pt"), map_location=torch.device('cpu'))[uniprot_id]
 
     with torch.no_grad():
         output = model(input_tensor)
