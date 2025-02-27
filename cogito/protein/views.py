@@ -27,7 +27,7 @@ def pdb_to_uniprot(pdb_id):
         "6SGE" : "A0A4E0W6L3",
         "6PYJ" : "A0A583ZBQ2"
     }
-    return d[pdb_id]
+    return d.get(pdb_id, "UNKNOWN")
 
     # url = f"https://data.rcsb.org/rest/v1/core/entry/{pdb_id}"
     # response = requests.get(url)
