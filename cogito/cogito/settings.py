@@ -24,7 +24,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'your-default-key-for-dev')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['protein-ai-iota.vercel.app', '127.0.0.1', 'proteinai.tech', 'www.proteinai.tech']
+ALLOWED_HOSTS = ['34.132.177.214','protein-ai-iota.vercel.app', '127.0.0.1', 'proteinai.tech', 'www.proteinai.tech']
 
 
 # Application definition

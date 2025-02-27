@@ -1,1 +1,1 @@
-web: gunicorn cogito.wsgi:application --bind 0.0.0.0:$PORT
+web: pip install torch torchvision && gunicorn cogito.wsgi:application --bind 0.0.0.0:$PORT

@@ -5,7 +5,9 @@ import requests
 import matplotlib.pyplot as plt
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render
+from django.conf import settings
 import numpy as np
+import os
 
 from Bio.PDB import PDBList
 import torch
@@ -170,7 +172,7 @@ def get_pdb_info(pdb_id):
 def view_pdb(request):
     if request.method == "GET":
         # Retrieve the 'identifier' from the URL query parameters
-        input_tensor = torch.load("/Users/tejaakella/Desktop/Hacklytics2025/cogito/protein/smallembed.pt", map_location=torch.device('cpu'))
+        input_tensor = torch.load(os.path.join(settings.BASE_DIR, "protein", "smallembed.pt"), map_location=torch.device('cpu'))
         print(input_tensor.keys())
         identifier = request.GET.get("identifier", "").strip().upper()
         print(1)
@@ -216,7 +218,7 @@ def view_pdb(request):
         return render(request, "base.html", {"pdb_info": pdb_info,"all_pdb_ids": all_pdb_ids, "identifier": identifier, "pdb_id": pdb_id})
 
 def inference(uniprot_id):
-    model = torch.jit.load("/Users/tejaakella/Desktop/Hacklytics2025/model_traced.pt", map_location=torch.device('cpu'))
+    model = torch.jit.load(os.path.join(settings.BASE_DIR, "model_traced.pt"), map_location=torch.device('cpu'))
     print(uniprot_id)
     model.eval()
     input_tensor = torch.load("/Users/tejaakella/Desktop/Hacklytics2025/cogito/protein/smallembed.pt",
@@ -227,7 +229,7 @@ def inference(uniprot_id):
 
     top_values, top_indices = torch.topk(output, 10, largest=True)[:10]
 
-    with open('/Users/tejaakella/Desktop/Hacklytics2025/ind_to_id.json') as f:
+    with open(os.path.join(settings.BASE_DIR, "ind_to_id.json")) as f:
         indices_to_ids = json.load(f)
 
     top_ids = [indices_to_ids[str(idx.item())] for idx in top_indices]
